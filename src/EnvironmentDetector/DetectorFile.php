@@ -18,9 +18,12 @@ class DetectorFile implements Detector
      */
     private $environment;
 
-    function __construct()
+    /**
+     * @param string $projectPath
+     */
+    function __construct($projectPath)
     {
-        $this->environment = require($_SERVER['DOCUMENT_ROOT'] . '/../' . self::FILE_NAME);
+        $this->environment = require($projectPath . '/' . self::FILE_NAME);
     }
 
     /**

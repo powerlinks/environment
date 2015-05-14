@@ -7,6 +7,7 @@ Usage
 -----
 
 composer.json
+
 ```
 {
     "require": {
