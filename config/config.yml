@@ -1,5 +1,7 @@
+detector:
+  - global
 environments:
-  production
-  prelive
-  development
-  test
+  - production
+  - prelive
+  - development
+  - test
