@@ -1,7 +1,7 @@
-detector:
-  - global
+detector: global
 environments:
-  - production
-  - prelive
   - development
-  - test
+  - testing
+  - quality-assurance
+  - staging
+  - production

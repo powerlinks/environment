@@ -18,9 +18,15 @@ class EnvironmentConfiguration
      */
     protected $configuration;
 
-    function __construct()
+    /**
+     * @var string/null $configurationFile
+     */
+    protected $configurationFile = null;
+
+    function __construct($configurationFile = null)
     {
-        $this->configuration = Yaml::parse(file_get_contents(__DIR__ . '/../config/config.yml'));
+        $this->setConfigurationFilePath($configurationFile);
+        $this->configuration = Yaml::parse(file_get_contents($this->getConfigurationFilePath()));
     }
 
     /**
@@ -44,6 +50,24 @@ class EnvironmentConfiguration
      */
     public function getDetector()
     {
-        return $this->configuration['construct'];
+        return $this->configuration['detector'];
     }
+
+
+    public function getConfigurationFilePath()
+    {
+        return $this->configurationFile;
+    }
+
+    /**
+     * @param string/null $configurationFile
+     */
+    public function setConfigurationFilePath($configurationFile = null)
+    {
+        if (is_null($configurationFile)) {
+            $configurationFile = realpath(__DIR__ . '/../config/config.yml');
+        }
+        $this->configurationFile = $configurationFile;
+    }
+
 }
