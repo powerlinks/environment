@@ -13,9 +13,14 @@ use Exception;
 
 class DetectorFactory
 {
-    public static function create($detectorImplementation)
+    /**
+     * @param string $detectorImplementationName
+     * @return Detector
+     * @throws Exception
+     */
+    public static function create($detectorImplementationName)
     {
-        $class = __NAMESPACE__.'\Detector'.ucfirst($detectorImplementation);
+        $class = __NAMESPACE__.'\Detector'.ucfirst($detectorImplementationName);
         if ( ! class_exists($class)) {
             throw new Exception('Detector class does not exist');
         }

@@ -1,7 +1,13 @@
-detector: global
+detectors_order:
+  - file
+  - global
+  - awsTag
 environments:
   - development
   - testing
   - quality-assurance
   - staging
+  - demo
   - production
+default_environment: development
+cache_type: apc

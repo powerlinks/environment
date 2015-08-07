@@ -10,6 +10,7 @@
 namespace PowerLinks\Environment;
 
 use PowerLinks\Environment\EnvironmentDetector\Detector;
+use PowerLinks\Environment\Cache\Cache;
 use Exception;
 
 class Environment
@@ -25,6 +26,11 @@ class Environment
     protected $detector;
 
     /**
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
      * @var string
      */
     protected $environment;
@@ -32,12 +38,19 @@ class Environment
     /**
      * @param EnvironmentConfiguration $configuration
      * @param Detector $detector
+     * @param Cache $cache
      */
-    function __construct(EnvironmentConfiguration $configuration, Detector $detector)
+    function __construct(EnvironmentConfiguration $configuration, Detector $detector, Cache $cache = null)
     {
         $this->configuration = $configuration;
         $this->detector = $detector;
-        $this->setEnvironment($detector->getEnvironment());
+        $this->cache = $cache;
+
+        $environment = $this->restoreEnvironmentFromCache();
+        $this->setEnvironment($environment);
+        if (is_null($environment)) {
+            $this->saveEnvironmentToCache($environment);
+        }
     }
 
     /**
@@ -48,16 +61,47 @@ class Environment
         return $this->environment;
     }
 
+    public function restoreEnvironmentFromCache()
+    {
+        if (is_null($this->cache)) {
+            return null;
+        }
+        return $this->cache->restore();
+    }
+
+    public function saveEnvironmentToCache($environment)
+    {
+        if (is_null($this->cache)) {
+            return null;
+        }
+        $this->cache->save($environment);
+    }
+
     /**
      * @param string $environment
      * @throws Exception
      */
-    public function setEnvironment($environment)
+    public function setEnvironment($environment = null)
     {
+        if (is_null($environment)) {
+            $environment = $this->getEnvironmentFromDetector();
+        }
         if ( ! in_array($environment, $this->configuration->getEnvironmentsList())) {
-            throw new Exception('Environment is not valid');
+            $environment = $this->configuration->getDefaultEnvironment();
         }
         $this->environment = $environment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironmentFromDetector()
+    {
+        try {
+            return $this->detector->getEnvironment();
+        } catch (Exception $e) {
+            return $this->configuration->getDefaultEnvironment();
+        }
     }
 
     /**
@@ -90,6 +134,14 @@ class Environment
     public function isStaging()
     {
         return $this->checkEnvironment('staging');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDemo()
+    {
+        return $this->checkEnvironment('demo');
     }
 
     /**

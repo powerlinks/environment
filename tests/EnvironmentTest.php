@@ -35,12 +35,10 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('development', $this->environment->getEnvironment());
     }
 
-    /**
-     * @expectedException Exception
-     */
     public function testSetMissingEnvironment()
     {
         $this->environment->setEnvironment('missing-environment');
+        $this->assertEquals('development', $this->environment->getEnvironment());
     }
 
     public function testIsDevelopment()
@@ -99,6 +97,8 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
                 'staging',
                 'production'
             ]));
+        $configuration->method('getDefaultEnvironment')
+            ->will($this->returnValue('development'));
         return $configuration;
     }
 }

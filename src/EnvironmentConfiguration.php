@@ -46,17 +46,35 @@ class EnvironmentConfiguration
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getDetector()
+    public function getDetectorsOrder()
     {
-        return $this->configuration['detector'];
+        return $this->configuration['detectors_order'];
     }
 
+    /**
+     * @return string
+     */
+    public function getDefaultEnvironment()
+    {
+        return $this->configuration['default_environment'];
+    }
 
+    /**
+     * @return string
+     */
     public function getConfigurationFilePath()
     {
         return $this->configurationFile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheType()
+    {
+        return $this->configuration['cache_type'];
     }
 
     /**

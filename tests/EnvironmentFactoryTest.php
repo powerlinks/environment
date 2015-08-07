@@ -27,13 +27,19 @@ class EnvironmentFactoryTest extends PHPUnit_Framework_TestCase
     public function testCreateWithExistingDetector()
     {
         $configFileContent = <<<EOF
-detector: global
+detectors_order:
+  - file
+  - global
+  - awsTag
 environments:
   - development
   - testing
   - quality-assurance
   - staging
+  - demo
   - production
+default_environment: development
+cache_type: apc
 EOF;
 
         $configFile = new vfsStreamFile('config.yml', 0775);
@@ -43,31 +49,6 @@ EOF;
         $this->assertInstanceOf(
             'PowerLinks\Environment\Environment',
             EnvironmentFactory::create(vfsStream::url('configDirectory/config.yml'))
-        );
-    }
-
-    /**
-     * @expectedException Exception
-     */
-    public function testCreateWithMissingDetector()
-    {
-        $configFileContent = <<<EOF
-detector: missing
-environments:
-  - development
-  - testing
-  - quality-assurance
-  - staging
-  - production
-EOF;
-
-        $configFile = new vfsStreamFile('missingDetectorConfig.yml', 0775);
-        $configFile->setContent($configFileContent);
-        vfsStreamWrapper::getRoot()->addChild($configFile);
-
-        $this->assertInstanceOf(
-            'PowerLinks\Environment\Environment',
-            EnvironmentFactory::create(vfsStream::url('configDirectory/missingDetectorConfig.yml'))
         );
     }
 

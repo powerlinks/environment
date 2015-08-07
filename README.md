@@ -28,17 +28,22 @@ It can be used two type of environment definition:
 By default the file name, where the environment name is stored, is ".env.php" in the project directory.
 The file ".env.php" has to added to .gitignore to avoid to push in production the wrong environment definition.
 
+### AwsTag variable
+
+This solution is very fast and it allows you to force the environment during the server set up and you will not have to take care of it anymore. 
+A global variable have to be defined at http server level and it can be configured for either apache or nginx.
+
 ### Global variable
 
 This solution is very fast and it allows you to force the environment during the server set up and you will not have to take care of it anymore. 
 A global variable have to be defined at http server level and it can be configured for either apache or nginx.
 
-#### Apache
+#### Set Apache global variable
 ```
 SetEnv ENVIRONMENT development
 ```
 
-#### Nginx
+#### Set Nginx global variable
 ```
 location / {
     ...

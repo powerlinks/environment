@@ -26,13 +26,19 @@ class EnvironmentConfigurationTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $configFileContent = <<<EOF
-detector: global
+detectors_order:
+  - file
+  - global
+  - awsTag
 environments:
   - development
   - testing
   - quality-assurance
   - staging
+  - demo
   - production
+default_environment: development
+cache_type: apc
 EOF;
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(new vfsStreamDirectory('configDirectory'));
@@ -46,14 +52,21 @@ EOF;
     public function testGetConfiguration()
     {
         $expectedResult = [
-            'detector' => 'global',
+            'detectors_order' => [
+                'file',
+                'global',
+                'awsTag'
+            ],
             'environments' => [
                 'development',
                 'testing',
                 'quality-assurance',
                 'staging',
+                'demo',
                 'production'
-            ]
+            ],
+            'default_environment' => 'development',
+            'cache_type' => 'apc'
         ];
         $returnedResult = $this->environmentConfiguration->getConfiguration();
         $this->assertTrue(is_array($returnedResult));
@@ -67,14 +80,30 @@ EOF;
             'testing',
             'quality-assurance',
             'staging',
+            'demo',
             'production'
         ];
         $this->assertEquals($expectedResult, $this->environmentConfiguration->getEnvironmentsList());
     }
 
-    public function testGetDetector()
+    public function testGetDetectorsOrder()
     {
-        $this->assertEquals('global', $this->environmentConfiguration->getDetector());
+        $result = [
+            'file',
+            'global',
+            'awsTag'
+        ];
+        $this->assertEquals($result, $this->environmentConfiguration->getDetectorsOrder());
+    }
+
+    public function testGetDefaultEnvironment()
+    {
+        $this->assertEquals('development', $this->environmentConfiguration->getDefaultEnvironment());
+    }
+
+    public function testGetCacheType()
+    {
+        $this->assertEquals('apc', $this->environmentConfiguration->getCacheType());
     }
 
     public function testGetConfigurationFilePath()

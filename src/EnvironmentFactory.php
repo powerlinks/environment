@@ -9,20 +9,17 @@
 
 namespace PowerLinks\Environment;
 
-use Exception;
-
-use PowerLinks\Environment\EnvironmentDetector\DetectorFactory;
+use PowerLinks\Environment\Cache\CacheFactory;
+use PowerLinks\Environment\EnvironmentDetector\DetectorsIterator;
+use PowerLinks\Environment\EnvironmentDetector\DetectorsProcessor;
 
 class EnvironmentFactory
 {
     public static function create($configurationFile = null)
     {
         $configuration = new EnvironmentConfiguration($configurationFile);
-        try {
-            $detector = DetectorFactory::create($configuration->getDetector());
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-        return new Environment($configuration, $detector);
+        $detector = new DetectorsProcessor(new DetectorsIterator($configuration->getDetectorsOrder()));
+        $cache = CacheFactory::create($configuration->getCacheType());
+        return new Environment($configuration, $detector, $cache);
     }
 }

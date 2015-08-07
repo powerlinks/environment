@@ -21,9 +21,13 @@ class DetectorFile implements Detector
     /**
      * @param string $projectPath
      */
-    function __construct($projectPath)
+    function __construct($projectPath = '../..')
     {
-        $this->environment = require($projectPath . '/' . self::FILE_NAME);
+        if ($filePath = $this->getFilePath($projectPath)) {
+            $this->environment = require($filePath);
+            return $this;
+        }
+        $this->environment = $filePath;
     }
 
     /**
@@ -32,6 +36,15 @@ class DetectorFile implements Detector
     public function getEnvironment()
     {
         return $this->environment;
+    }
+
+    public function getFilePath($projectPath)
+    {
+        $filePath = $projectPath.'/'.self::FILE_NAME;
+        if (file_exists($filePath)) {
+            return $filePath;
+        }
+        return null;
     }
 
 }

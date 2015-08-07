@@ -4,3 +4,4 @@
 # php
 vendor
 composer.lock
+.env.php
