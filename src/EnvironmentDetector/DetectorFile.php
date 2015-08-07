@@ -16,7 +16,7 @@ class DetectorFile implements Detector
     /**
      * @var string
      */
-    private $environment;
+    private $environment = null;
 
     /**
      * @param string $projectPath
@@ -27,7 +27,6 @@ class DetectorFile implements Detector
             $this->environment = require($filePath);
             return $this;
         }
-        $this->environment = $filePath;
     }
 
     /**

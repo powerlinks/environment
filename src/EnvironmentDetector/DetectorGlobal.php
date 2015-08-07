@@ -18,7 +18,7 @@ class DetectorGlobal implements Detector
     /**
      * @var string
      */
-    private $environment;
+    private $environment = null;
 
     /**
      * @throws Exception
@@ -27,8 +27,6 @@ class DetectorGlobal implements Detector
     {
         if (isset($_SERVER[self::KEY])) {
             $this->environment = $_SERVER[self::KEY];
-        } else {
-            throw new Exception('Environment not specified as an ENVIRONMENT variable');
         }
     }
 
