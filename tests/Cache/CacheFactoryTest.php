@@ -21,6 +21,11 @@ class CacheFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('PowerLinks\Environment\Cache\Cache', CacheFactory::create());
     }
 
+    public function testCacheCreationReturnNull()
+    {
+        $this->assertNull(CacheFactory::create('missing'));
+    }
+
     public function testApcCacheCreation()
     {
         // this test needs "apc.enable_cli = 1" inside "/etc/php.d/apcu.ini"

@@ -16,10 +16,14 @@ class CacheFactory
 {
     /**
      * @param $cacheType
-     * @return Cache
+     * @return Cache/null
      */
     public static function create($cacheType = 'apc')
     {
+        $class = __NAMESPACE__.'\Cache'.ucfirst($cacheType);
+        if ( ! class_exists($class)) {
+            return null;
+        }
         return call_user_func('self::create'.ucfirst($cacheType));
     }
 
