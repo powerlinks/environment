@@ -34,7 +34,7 @@ class CacheFactory
     {
         try {
             $driver = new Apc();
-            $driver->setOptions(['ttl' => 3600]);
+            $driver->setOptions(['ttl' => 86400]);
         } catch (Exception $e) {
             die('Caught exception: '.$e->getMessage());
         }

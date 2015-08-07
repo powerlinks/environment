@@ -6,9 +6,9 @@
  * @author Manuel Kanah <manuel@powerlinks.com>
  * Date: 07/08/15 - 12:39
  */
-
 namespace PowerLinks\Environment\EnvironmentDetector;
 
+use Exception;
 
 class DetectorsProcessor implements Detector
 {
@@ -26,7 +26,8 @@ class DetectorsProcessor implements Detector
     }
 
     /**
-     * @return string
+     * @return null|string
+     * @throws Exception
      */
     public function getEnvironment()
     {
@@ -38,8 +39,7 @@ class DetectorsProcessor implements Detector
                 }
             }
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            return null;
         }
-        return $environment;
     }
 }

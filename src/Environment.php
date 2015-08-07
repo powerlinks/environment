@@ -49,7 +49,7 @@ class Environment
         $environment = $this->restoreEnvironmentFromCache();
         $this->setEnvironment($environment);
         if (is_null($environment)) {
-            $this->saveEnvironmentToCache($environment);
+            $this->saveEnvironmentToCache();
         }
     }
 
@@ -69,12 +69,12 @@ class Environment
         return $this->cache->restore();
     }
 
-    public function saveEnvironmentToCache($environment)
+    public function saveEnvironmentToCache()
     {
         if (is_null($this->cache)) {
             return null;
         }
-        $this->cache->save($environment);
+        $this->cache->save($this->getEnvironment());
     }
 
     /**
